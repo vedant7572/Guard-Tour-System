@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "482542583583",
+    "project_id": "guard-tour-system-f89bf",
+    "storage_bucket": "guard-tour-system-f89bf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:482542583583:android:49768ec09fe98e6e3efa2a",
+        "android_client_info": {
+          "package_name": "com.example.gts"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6bunjidT92G2M9nEKYVSu2qQE5V1Vqx0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
