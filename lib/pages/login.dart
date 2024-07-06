@@ -6,6 +6,7 @@ import '../service/database.dart';
 import '../service/shared_pref.dart';
 import '../widget_support/text_style.dart';
 import 'bottomnav.dart';
+import 'forgotpassword.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -218,12 +219,12 @@ class _LoginState extends State<Login> {
                                   height: 15.0,
                                 ),
                                 GestureDetector(
-                                  // onTap: (){
-                                  //   Navigator.push(
-                                  //       context,
-                                  //       MaterialPageRoute(builder: (context)=>const ForgotPassword())
-                                  //   );
-                                  // },
+                                  onTap: (){
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context)=>const ForgotPassword())
+                                    );
+                                  },
                                   child: Container(
                                     alignment: Alignment.topRight,
                                     child: Text(
