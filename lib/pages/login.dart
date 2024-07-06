@@ -302,25 +302,6 @@ class _LoginState extends State<Login> {
                       const SizedBox(
                         height: 40.0,
                       ),
-                      GestureDetector(
-                        onTap: (){
-                          // Navigator.push(
-                          //     context,
-                          //      MaterialPageRoute(builder: (context)=>const AdminLogin())
-                          // );
-                        },
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: const Text(
-                            "Admin Login",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ),//admin login button//sign up gesture detector
                     ],
                   ),
                 )
