@@ -1,11 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:random_string/random_string.dart';
-
-import '../service/database.dart';
-import '../service/shared_pref.dart';
 import '../widget_support/text_style.dart';
-
 import 'bottomnav.dart';
 import 'login.dart';
 
@@ -47,25 +43,21 @@ class _SignupState extends State<Signup> {
                 )
             )
         );
-        String Id = randomAlphaNumeric(10);
 
-        Map<String, dynamic> addUserInfo = {
-          "Name":nameController.text,
-          "Email": mailController.text,
-          "Id": Id,
-        };
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(userCredential.user!.email)
+            .set({
+                'Name': nameController.text,
+                "Email": mailController.text,
+        });
+
 
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const BottomNavbar()
             )
         );
-        await DatabaseMethods().addUserDetails(addUserInfo, Id);
-        await SharedPreferenceHelper().saveUserName(nameController.text);
-        await SharedPreferenceHelper().saveUserEmail(mailController.text);
-        await SharedPreferenceHelper().saveUserId(Id);
-        // user id is the random id generated above
-
       }
       on FirebaseException catch (e) {
         if (e.code == 'weak-password') {

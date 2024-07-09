@@ -4,6 +4,7 @@ import 'package:gts/pages/bottomnav.dart';
 import 'package:gts/pages/login.dart';
 import 'package:gts/pages/profile.dart';
 import 'package:gts/pages/signup.dart';
+import 'package:gts/service/auth.dart';
 
 
 void main()  async{
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Signup(), //check>>>>>
+      home: AuthPage()
     );
   }
 }
