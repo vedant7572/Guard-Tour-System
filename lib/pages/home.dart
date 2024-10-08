@@ -49,7 +49,6 @@ class _HomeState extends State<Home> {
   void scanQRCode() async {
     try{
       final qrCode = await FlutterBarcodeScanner.scanBarcode('#ff6666', 'Cancel', true, ScanMode.QR);
-
       if (!mounted) return;
 
       setState(() {

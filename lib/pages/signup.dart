@@ -14,21 +14,33 @@ class Signup extends StatefulWidget {
 
 class _SignupState extends State<Signup> {
   bool _obscureText = true;
+
   void _togglePasswordVisibility() {
     setState(() {
       _obscureText = !_obscureText;
     });
   } // for password visibility
 
-  String email = "", password = "", name = "";
+  String firstName = "", lastName="",email = "" , phone="" , password = "", confirmPassword="";
 
-  TextEditingController nameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
   TextEditingController mailController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
 
   final _formkey = GlobalKey<FormState>();
 
   registration() async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
     if (_formkey.currentState!.validate()) {
       try {
         UserCredential userCredential = await FirebaseAuth.instance
@@ -48,11 +60,13 @@ class _SignupState extends State<Signup> {
             .collection('users')
             .doc(userCredential.user!.email)
             .set({
-                'Name': nameController.text,
-                "Email": mailController.text,
+                'firstName': firstName,
+                'lastName' : lastName,
+                "Email": email,
+                "Contact" : phone
         });
 
-
+        Navigator.pop(context);
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const BottomNavbar()
@@ -84,7 +98,6 @@ class _SignupState extends State<Signup> {
     }
   } // for email password checking with firebase and validation
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,7 +115,7 @@ class _SignupState extends State<Signup> {
                 ),//white part
                 Container(
                   margin: EdgeInsets.only(top: MediaQuery.of(context).size.height / 3),
-                  height: MediaQuery.of(context).size.height /1.6,
+                  height: MediaQuery.of(context).size.height /1.2,
                   width: MediaQuery.of(context).size.width,
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
@@ -131,16 +144,18 @@ class _SignupState extends State<Signup> {
                           fit: BoxFit.cover,
                         ),
                       ), //center logo
+
                       const SizedBox(
                         height: 50.0,
                       ),
+
                       Material(
                         elevation: 5.0,
                         borderRadius: BorderRadius.circular(20),
                         child: Container(
                           padding: EdgeInsets.only(left: 20.0, right: 20.0),
                           width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height /1.8,
+                          height: MediaQuery.of(context).size.height /1.2,
                           decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(20),
@@ -168,10 +183,10 @@ class _SignupState extends State<Signup> {
 
 
                                 TextFormField(
-                                  controller: nameController,
+                                  controller: firstNameController,
                                   validator: (value){
                                     if(value==null || value.isEmpty){
-                                      return 'Please enter Name';
+                                      return 'Please enter First Name';
                                     }
                                     return null;
                                   },
@@ -179,10 +194,32 @@ class _SignupState extends State<Signup> {
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.all(Radius.circular(12.0)),
                                     ),
-                                    labelText: 'Name',
+                                    labelText: 'First Name',
                                     prefixIcon: Icon(Icons.person),
                                   ),
-                                ),//name
+                                ),//First name
+
+
+                                const SizedBox(
+                                  height: 30.0,
+                                ),
+
+                                TextFormField(
+                                  controller: lastNameController,
+                                  validator: (value){
+                                    if(value==null || value.isEmpty){
+                                      return 'Please enter Last Name';
+                                    }
+                                    return null;
+                                  },
+                                  decoration: const InputDecoration(
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                                    ),
+                                    labelText: 'Last Name',
+                                    prefixIcon: Icon(Icons.person),
+                                  ),
+                                ),//Last name
 
 
                                 const SizedBox(
@@ -213,6 +250,34 @@ class _SignupState extends State<Signup> {
                                   height: 30.0,
                                 ),
 
+                                TextFormField(
+                                  controller: phoneController,
+                                  keyboardType: TextInputType.phone,
+                                  validator: (value) {
+                                    // Regular expression for a 10-digit phone number
+                                    String pattern = r'^[0-9]{10}$';
+                                    RegExp regExp = RegExp(pattern);
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter phone number';
+                                    } else if (!regExp.hasMatch(value)) {
+                                      return 'Please enter a valid 10-digit phone number';
+                                    }
+                                    return null;
+                                  },
+                                  decoration: const InputDecoration(
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                                    ),
+                                    labelText: 'Contact No.',
+                                    prefixIcon: Icon(Icons.phone),
+                                  ),
+                                ),
+
+
+
+                                const SizedBox(
+                                  height: 30.0,
+                                ),
 
                                 TextFormField(
                                   controller: passwordController,
@@ -238,7 +303,37 @@ class _SignupState extends State<Signup> {
                                     ),
                                     filled: true,
                                   ),
-                                ),//password text field
+                                ),// confirm password text field
+
+                                const SizedBox(
+                                  height: 40.0,
+                                ),
+
+                                TextFormField(
+                                  controller: confirmPasswordController,
+                                  validator: (value){
+                                    if(value==null || value.isEmpty){
+                                      return 'Please enter password';
+                                    }
+                                    return null;
+                                  },
+                                  obscureText: _obscureText,
+                                  decoration: InputDecoration(
+                                    border: const OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                                    ),
+                                    labelText: 'Confirm Password',
+                                    prefixIcon: Icon(Icons.lock),
+                                    suffixIcon: IconButton(
+                                      icon: Icon(
+                                        _obscureText ? Icons.visibility : Icons.visibility_off,
+                                        color: Colors.grey,
+                                      ),
+                                      onPressed: _togglePasswordVisibility,
+                                    ),
+                                    filled: true,
+                                  ),
+                                ),//confirm password text field
 
                                 const SizedBox(
                                   height: 40.0,
@@ -248,8 +343,11 @@ class _SignupState extends State<Signup> {
                                   onTap: () async {
                                     if (_formkey.currentState!.validate()) {
                                       setState(() {
+                                        firstName = firstNameController.text;
+                                        lastName=lastNameController.text;
                                         email = mailController.text;
-                                        name = nameController.text;
+                                        phone=phoneController.text;
+                                        confirmPassword=confirmPasswordController.text;
                                         password = passwordController.text;
                                       });
                                     }

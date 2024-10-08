@@ -12,7 +12,7 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   final user = FirebaseAuth.instance.currentUser!;
-  String? name, email;
+  String? name, email, contact;
   bool isLoading = true;
 
   @override
@@ -23,8 +23,6 @@ class _ProfileState extends State<Profile> {
 
   void loadUserData() {
     setState(() {
-      name = user.displayName ?? "fubar";
-      email = user.email;
       isLoading = false;
     });
   }
@@ -33,13 +31,14 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: StreamBuilder<DocumentSnapshot>(
-      stream: FirebaseFirestore.instance
-          .collection("users")
-          .doc(user.email)
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final userData = snapshot.data!.data() as Map<String, dynamic>;
+          stream: FirebaseFirestore.instance
+              .collection("users")
+              .doc(user.email)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final userData = snapshot.data!.data() as Map<String, dynamic>;
+              name=(userData['firstName'] ?? '') + " " + (userData['lastName'] ?? '');
 
           return SingleChildScrollView(
               child: Column(
@@ -84,7 +83,7 @@ class _ProfileState extends State<Profile> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          userData['Name'],
+                          userData['firstName'],
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 23.0,
@@ -97,9 +96,11 @@ class _ProfileState extends State<Profile> {
                   ), //name of user
                 ],
               ),
+
               const SizedBox(
                 height: 20.0,
               ),
+
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Material(
@@ -134,7 +135,7 @@ class _ProfileState extends State<Profile> {
                                   fontWeight: FontWeight.w600),
                             ),
                             Text(
-                              userData['Name'],
+                              name.toString(),
                               style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 16.0,
@@ -147,9 +148,11 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
               ), //name row
+
               const SizedBox(
                 height: 30.0,
               ),
+
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Material(
@@ -197,9 +200,11 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
               ), //email id of user
+
               const SizedBox(
                 height: 30.0,
               ),
+
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Material(
@@ -214,23 +219,30 @@ class _ProfileState extends State<Profile> {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const Row(
+                    child: Row(
                       children: [
-                        Icon(
-                          Icons.description,
+                        const Icon(
+                          Icons.phone,
                           color: Colors.black,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 20.0,
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              "Terms and Condition",
+                            const Text(
+                              "Contact No.",
                               style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: 20.0,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            Text(
+                              userData['Contact'],
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16.0,
                                   fontWeight: FontWeight.w600),
                             )
                           ],
@@ -239,10 +251,12 @@ class _ProfileState extends State<Profile> {
                     ),
                   ),
                 ),
-              ), //terms and conditions
+              ), //phone no of user
+
               const SizedBox(
                 height: 30.0,
               ),
+
               GestureDetector(
                 onTap: () {
                   //AuthMethods().signOut();
